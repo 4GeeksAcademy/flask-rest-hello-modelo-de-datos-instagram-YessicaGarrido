@@ -1,10 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String
+from sqlalchemy import String, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
+import enum
 
 db = SQLAlchemy()
-
+class TypeMedia (enum.Enum):
+    PHOTO = "photo"
+    VIDEO = "video"
 
 class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -23,7 +25,7 @@ class Follower(db.Model):
 
 class Media(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    type: Mapped[int] = mapped_column(nullable=False)
+    type: Mapped[TypeMedia] = mapped_column(Enum(TypeMedia, name = "typemedia",native_enum=False),nullable=False)
     url: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     post_id: Mapped["Post"] = relationship()
 
